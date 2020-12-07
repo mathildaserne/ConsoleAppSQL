@@ -85,20 +85,15 @@ namespace ConsoleAppSQL
         }
         public static void ExecuteSQL(string sql, params string[] values)
         {
-            // Skapa en koppling till databasen
             using (var sqlite2 = new SQLiteConnection("data source=" + "MinDatabase.db"))
             {
-                // Öppna kommunikationen
                 sqlite2.Open();
-                // Skapa ett SQL-kommando
                 SQLiteCommand cmd = new SQLiteCommand(sql, sqlite2);
-                // Kör SQL-koden
                 for (int i = 0; i < values.Length; i += 2)
                 {
                     cmd.Parameters.AddWithValue(values[i], values[i + 1]);
                 }
                 cmd.ExecuteNonQuery();
-                // Lägg till standarddata i databasen
             }
         }
 
