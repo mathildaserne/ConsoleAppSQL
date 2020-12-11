@@ -9,30 +9,37 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Data;
 
-class DoorEventsLog:SQL
-{
-        public static int MaxEntries = 20;
-        
-        public static DataTable FindEntriesByDoor(string Door)
+    class DoorEventsLog : SQL
+    {
+        public int MaxEntries
+        { get; set; }    
+        public DoorEventsLog(int _MaxEntries)
+        {
+            MaxEntries = _MaxEntries;
+        }
+
+    public static DataTable FindEntriesByDoor(string Door)
         {
             //Hämtar data från databasen 
             string DörrKommando = @"SELECT Main.DatumTid, Main.Location, Main.Kod, 
-            Main.Tagg, Main.Tenant FROM Main
+            Main.Tagg, Main.Tenant FROM Main 
              
             JOIN Event On Main.Kod=Event.Kod
             JOIN Location On Main.Location=Location.Door
             JOIN Tenant On (Main.Tenant=Tenant.Person AND Main.Tagg=Tenant.Tagg)          
-            WHERE Location.Door=@Door 
+            WHERE Location.Door=@Door
+            ORDER BY Main.DatumTid DESC
             LIMIT @Entry";
 
-            
+            DoorEventsLog DoorEvents = new DoorEventsLog(20);
+
             DataTable dt = new DataTable();
             using (SQLiteConnection con = new SQLiteConnection("data source=" + "MinDatabase.db")) 
             {
                 con.Open();
                 SQLiteCommand cmd = new SQLiteCommand(DörrKommando,con);
                 cmd.Parameters.AddWithValue("@Door", Door);
-                cmd.Parameters.AddWithValue("@Entry", MaxEntries);
+                cmd.Parameters.AddWithValue("@Entry", DoorEvents.MaxEntries);
                 SQLiteDataAdapter da = new SQLiteDataAdapter(cmd);
                 da.Fill(dt);
             }
@@ -49,7 +56,10 @@ class DoorEventsLog:SQL
             JOIN Location On Main.Location=Location.Door
             JOIN Tenant On (Main.Tenant=Tenant.Person AND Main.Tagg=Tenant.Tagg)           
             WHERE Event.Kod=@Kod
+            ORDER BY Main.DatumTid DESC
             LIMIT @Entry";
+
+            DoorEventsLog DoorEvents = new DoorEventsLog(20);
 
             DataTable dt = new DataTable();
             using (SQLiteConnection con = new SQLiteConnection("data source=" + "MinDatabase.db"))
@@ -57,7 +67,7 @@ class DoorEventsLog:SQL
                 con.Open();
                 SQLiteCommand cmd = new SQLiteCommand(DörrKommando, con);
                 cmd.Parameters.AddWithValue("@Kod", Event);
-                cmd.Parameters.AddWithValue("@Entry", MaxEntries);
+                cmd.Parameters.AddWithValue("@Entry", DoorEvents.MaxEntries);
                 SQLiteDataAdapter da = new SQLiteDataAdapter(cmd);
                 da.Fill(dt);
             }
@@ -75,7 +85,10 @@ class DoorEventsLog:SQL
             JOIN Location On Main.Location=Location.Door
             JOIN Tenant On (Main.Tenant=Tenant.Person AND Main.Tagg=Tenant.Tagg)             
             WHERE Location.Door = @Door
+            ORDER BY Main.DatumTid DESC
             LIMIT @Entry";
+
+            DoorEventsLog DoorEvents = new DoorEventsLog(20);
 
             DataTable dt = new DataTable();
             using (SQLiteConnection con = new SQLiteConnection("data source=" + "MinDatabase.db"))
@@ -83,7 +96,7 @@ class DoorEventsLog:SQL
                 con.Open();
                 SQLiteCommand cmd = new SQLiteCommand(DörrKommando, con);
                 cmd.Parameters.AddWithValue("@Door", Location);
-                cmd.Parameters.AddWithValue("@Entry", MaxEntries);
+                cmd.Parameters.AddWithValue("@Entry", DoorEvents.MaxEntries);
                 SQLiteDataAdapter da = new SQLiteDataAdapter(cmd);
                 da.Fill(dt);
             }
@@ -101,7 +114,10 @@ class DoorEventsLog:SQL
             JOIN Location On Main.Location=Location.Door
             JOIN Tenant On (Main.Tenant=Tenant.Person AND Main.Tagg=Tenant.Tagg)             
             WHERE Tenant.Tagg=@Tagg
+            ORDER BY Main.DatumTid DESC
             LIMIT @Entry";
+
+            DoorEventsLog DoorEvents = new DoorEventsLog(20);
 
             DataTable dt = new DataTable();
             using (SQLiteConnection con = new SQLiteConnection("data source=" + "MinDatabase.db"))
@@ -109,7 +125,7 @@ class DoorEventsLog:SQL
                 con.Open();
                 SQLiteCommand cmd = new SQLiteCommand(DörrKommando, con);
                 cmd.Parameters.AddWithValue("@Tagg", Tagg);
-                cmd.Parameters.AddWithValue("@Entry", MaxEntries);
+                cmd.Parameters.AddWithValue("@Entry", DoorEvents.MaxEntries);
                 SQLiteDataAdapter da = new SQLiteDataAdapter(cmd);
                 da.Fill(dt);
             }
@@ -127,7 +143,10 @@ class DoorEventsLog:SQL
             JOIN Location On Main.Location=Location.Door
             JOIN Tenant On (Main.Tenant=Tenant.Person AND Main.Tagg=Tenant.Tagg)           
             WHERE Tenant.Person=@Person
+            ORDER BY Main.DatumTid DESC
             LIMIT @Entry";
+
+            DoorEventsLog DoorEvents = new DoorEventsLog(20);
 
             DataTable dt = new DataTable();
             using (SQLiteConnection con = new SQLiteConnection("data source=" + "MinDatabase.db"))
@@ -135,7 +154,7 @@ class DoorEventsLog:SQL
                 con.Open();
                 SQLiteCommand cmd = new SQLiteCommand(DörrKommando, con);
                 cmd.Parameters.AddWithValue("@Person", Tenant);
-                cmd.Parameters.AddWithValue("@Entry", MaxEntries);
+                cmd.Parameters.AddWithValue("@Entry", DoorEvents.MaxEntries);
                 SQLiteDataAdapter da = new SQLiteDataAdapter(cmd);
                 da.Fill(dt);
             }
@@ -150,7 +169,10 @@ class DoorEventsLog:SQL
             JOIN Tenant On (Main.Tagg=Tenant.Tagg AND Main.Tenant=Tenant.Person)
             JOIN Location On Main.Location=Location.Door
             WHERE Location.Door=@LGHNR 
+            ORDER BY Main.DatumTid DESC
             LIMIT @Entry";
+
+            DoorEventsLog DoorEvents = new DoorEventsLog(20);
 
             DataTable dt = new DataTable();
             using (SQLiteConnection con = new SQLiteConnection("data source=" + "MinDatabase.db"))
@@ -158,7 +180,7 @@ class DoorEventsLog:SQL
                 con.Open();
                 SQLiteCommand cmd = new SQLiteCommand(DörrKommando, con);
                 cmd.Parameters.AddWithValue("@LGHNR", LGH);
-                cmd.Parameters.AddWithValue("@Entry", MaxEntries);
+                cmd.Parameters.AddWithValue("@Entry", DoorEvents.MaxEntries);
                 SQLiteDataAdapter da = new SQLiteDataAdapter(cmd);
                 da.Fill(dt);
             }

@@ -8,6 +8,7 @@ namespace ConsoleAppSQL
 {
     class SQL
     {
+        
         public const string Database = @".\MinDatabase.db";
 
         public static void SkapaDatabas() //Skapar databasen
@@ -84,6 +85,7 @@ namespace ConsoleAppSQL
             }
 
         }
+        
         public static void ExecuteSQL(string sql, params string[] values)
         {
             //Koppling till databas
