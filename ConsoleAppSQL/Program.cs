@@ -11,7 +11,7 @@ namespace ConsoleAppSQL
     {
         static void Main()
         {
-            SQL.SkapaDatabas();
+            SkapaData.SkapaDatabas();
 
             var byDoor = DoorEventsLog.FindEntriesByDoor("LGH 0102")?.Rows;
             var byEvent = DoorEventsLog.FindEntriesByEvent("DÖIN")?.Rows;
@@ -28,6 +28,7 @@ namespace ConsoleAppSQL
             OutputTenants(tenants);
 
             EnterLogg();
+            
 
         }
 

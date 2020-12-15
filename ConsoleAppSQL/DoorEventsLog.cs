@@ -188,12 +188,11 @@ using System.Data;
 
         }
 
-        public static DataTable LogEntry(string DateTime, string Loc, string Code, string Tag, string Ten)
+        public static void LogEntry(string DateTime, string Loc, string Code, string Tag, string Ten)
         {
 
             string LoggEntry = @"Insert into main(DatumTid, Location, Kod, Tagg, Tenant) values
             (@DatumTid, @Location, @Kod, @Tagg, @Tenant)";
-            DataTable dt = new DataTable();
             using (SQLiteConnection con = new SQLiteConnection("data source=" + "MinDatabase.db"))
             {
                 con.Open();
@@ -203,11 +202,9 @@ using System.Data;
                 cmd.Parameters.AddWithValue("@Kod", Code);
                 cmd.Parameters.AddWithValue("@Tagg", Tag);
                 cmd.Parameters.AddWithValue("@Tenant", Ten);
-                SQLiteDataAdapter da = new SQLiteDataAdapter(cmd);
-                da.Fill(dt);
-
+                cmd.ExecuteNonQuery();
             }
-            return dt;
+            
 
         }
 
